@@ -1,4 +1,8 @@
 import pygame
+import json 
+
+WHITE = (255, 255, 255)
+GRAY = (128, 128, 128)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -11,6 +15,10 @@ class Player(pygame.sprite.Sprite):
         self.resize = []
         self.images = []
 
+        self.font = pygame.font.Font('font/deliver.ttf', 26)
+        #플레이어의 정보 로드
+        self.GetData()
+        #아래 코드 리팩토링 하기 
         self.images.append (pygame.image.load ('images/walk1.png'))
         self.images.append (pygame.image.load ('images/walk2.png'))
         self.images.append (pygame.image.load ('images/walk3.png'))
@@ -27,21 +35,32 @@ class Player(pygame.sprite.Sprite):
             self.resize.append(pygame.transform.scale(image, (60, 80)))
         self.image = self.resize[self.index]
         self.rect = self.image.get_rect()
-        #self.rect.center = (100, 410)
 
-    #지형과 몬스터 벽에 대한 Collision 체크 필요 
-    #rect 객체의 Low부분 충돌 체크 필요  이부분이  안된다면 지형을 선으로 해서 페이크 현상 줘야함 
-   
-    #스페이스를 눌렀을 때 충돌체크를 검사한다. 이때는 NPC검사 
-    #리턴값은 충돌된 객체들이다. 
-    #플레이어가 점프중일때 충돌된 객체는 무시하되 점프하고 내려올때 
-    #플레이어의 Low.y와 충돌된 객체의 High.Y외 비교한다. 
-    #낙하 기능을 만들어야됨 .
-    #측면에 대한 충돌이 안되기때문에 이미 충돌이 되고 나서야 충돌이 가능하다. 그래서 collision.rect.top + 1 점프수치도 애매해서 center로 변경 
+    
+    def GetData(self):
+        with open('json/player.json', encoding='utf-8') as playerinfo:
+            self.userinfo = json.load(playerinfo)
+
+    def SaveData(self):
+        with open('json/player.json', 'w', encoding='utf-8') as playerinfo:
+            json.dump(self.userinfo, playerinfo, indent='\t')
+        self.GetData()
+
     def Check_Collision(self):
-        collisions = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
-        if collisions:
-            for collision in collisions:
+        #몬스터와의 충돌
+        '''
+        mob_collisions = pygame.sprite.spritecollide(self, self.game.MonsterObj.GetMonsterGroup(), False)
+        if mob_collisions:
+            for collision in mob_collisions:
+                if self.GetDamage(collision.Attack()): #True라면 사망
+                    return "Death"
+                else:
+                    continue
+        '''
+        #바닥과의 충돌
+        floor_collisions = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
+        if floor_collisions:
+            for collision in floor_collisions:
                 #print(collision.rect.top+10, self.rect.bottom)
                 #점프가 하강일때 올라갈때는 무시
                 #print(collision.rect.top, self.rect.bottom, self.Way)#480  451 False
@@ -55,6 +74,21 @@ class Player(pygame.sprite.Sprite):
                 else: 
                     continue
 
+    def Draw_BottomBar(self):
+        pygame.draw.rect(self.game.gamepad, GRAY , (0, 422, 1024, 90))
+        pygame.draw.line(self.game.gamepad, WHITE, (200, 422), (200, 512))
+        pygame.draw.line(self.game.gamepad, WHITE, (640, 422), (640, 512))
+        name = self.userinfo['info']['username']
+        level = self.userinfo['stat']['level']
+        text = self.font.render('Lv.{} {}'.format(str(level), name), True, WHITE, GRAY)
+        textRect = text.get_rect()
+        textRect.topleft = (20,445)
+        self.game.gamepad.blit(text, textRect)
+        #[0] current, [1] is max
+        hp = self.userinfo['stat']['hp']
+        mp = self.userinfo['stat']['mp']
+        exp = self.userinfo['stat']['exp']
+   
     #낙화 기능 점프 방지를 해야하니 move쓰지 않고 canjump에 False넣고 반복문 #CanFall 이라는 변수를 둬야할듯 
     def SetPos(self, pos):
         #self.Check_Collision()
@@ -62,6 +96,28 @@ class Player(pygame.sprite.Sprite):
         #self.rect.bottomleft = pos
         self.rect.right = pos[0]
         self.rect.bottom = pos[1]-100 
+
+#테스트용 L_CTRL, (화살 발사)
+#스킬류가 있어서 음 일단 test용 Attack으로 진행 
+    def Attack(self):
+        return self.userinfo['stat']['damage']
+
+    def SetHealth(self):
+        pass
+
+#몬스터로 인한 공격
+    def GetDamage(self, damage):
+        damage = self.Cal_Damage(damage)
+        if self.userinfo['stat']['hp'] - damage <= 0:
+            return True #사망 
+        else:
+            self.userinfo['stat']['hp'] -= damage
+            self.SaveData()
+            return False
+
+    def Cal_Damage(self, damage):
+        return damage * (100 / (100 * self.userinfo['stat']['defence']))
+
 
     def update(self, LookAt): #현재 바라보고 있는 방향 인자로 넣음 
         original= {'x':self.rect.x, 'y':self.rect.y}

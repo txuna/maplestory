@@ -5,22 +5,21 @@ import pygame
 class MapClass(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
+
         self.StartMap = [
             "0000000000000000000000000000000000",
             "0                                0",
             "0                                0",
             "0                                0",
             "0                                0",
+            "0                           N    0",
+            "0                         mmmmm  0",
             "0                                0",
+            "0       mmmmmmmm                 0",
             "0                                0",
-            "0                                0",
-            "0                                0",
-            "0                                0",
-            "0                      mmmmmmm   0",
-            "0             mmmmmmmmm          0",
-            "0    mmmmmmmmm                   0",
-            "0                                0",
-            "0 p                              0",
+            "0                mmmmmm          0",
+            "0       mmmmmmm                  0",
+            "0  p                             0",
             "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
         ]
         self.map_list = {'Start':self.StartMap}
@@ -50,7 +49,9 @@ class MapClass(pygame.sprite.Sprite):
                         self.PlayerSetPos = [x,y-2] #+1은 닿기위한 보정값
                     block = MapBlock([x, y])
                     self.BlockGroup.add(block)
-                x += 30
+                elif col == 'N':
+                    pass
+                x+=30
             y += 30
             x = 0
 

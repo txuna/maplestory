@@ -47,7 +47,7 @@ class Game:
         self.MonsterObj = MonsterClass(self)
         self.playerGroup.add(self.player)
 
-    #특정 개체수 미만으로 떨어지면 생성
+#특정 개체수 미만으로 떨어지면 지속적으로 생성
     def LoadMonster(self):
         if self.Max_Mob == 0: #만약 몬스터가 없는 지역이라면
             return
@@ -56,12 +56,17 @@ class Game:
         self.MonsterGroup.update()
         self.MonsterGroup.draw(self.gamepad)
             
+#플레이어의 하단 정보를 불러옴 
+    def GetBottomBar(self):
+        self.player.Draw_BottomBar()
 
+#지속적으로 맵을 로딩
     def LoadMap(self):
         self.gamepad.blit(forest_background, (0,0))
         self.MapGroup = self.MapObj.GetMapGroup()
         self.MapGroup.draw(self.gamepad)
 
+#포탈에 진입시 맵을 생성함. 그리고 맵에 나타나는 몬스터수 생성 
     def MakeMap(self):
         self.MapObj.Handler('Start') #Current_Pos
         self.MonsterObj.InitGroup() #몬스터 그룹 초기화
@@ -94,10 +99,12 @@ class Game:
 
             self.gamepad.fill(WHITE)
             self.LoadMap()
+            self.gamepad.blit(self.player.image, self.player.rect)
+            self.GetBottomBar()
             self.LoadMonster()
             self.player.update(self.LookAt)
             self.player.jump()
-            self.gamepad.blit(self.player.image, self.player.rect)
+            
             
             pygame.display.flip() #화면 전체를 업데이트함. pygame.display.update()와 같지만 이 update는 인수가 있다면 그 인수만 update
 
