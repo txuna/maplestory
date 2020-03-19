@@ -1,36 +1,43 @@
 {
-    "stat":{
-        "hp":[300, 300],
-        "mp":[300, 300],
-        "hp_percent":0,
-        "mp_percent":0,
-        "exp":[20, 100],
-        "exp_percent":0,
-        "damage":10,
-        "damage_percent":0,
-        "defensive":0,
-        "defensive_percent":0,
-        "speed":0,
-        "speed_percent":0,
-        "critical_percent":0,
-        "evasion_percent":0,
-        "level":1
-    },
-    "item":{
-
-    },
-    "info":{
-        "username":"tuuna",
-        "password":"1234",
-        "money":"1000"
-    },
-    "wear":{
-        "hat":"*",
-        "coat":"*",
-        "pants":"*",
-        "shoes":"*",
-        "ring":"*",
-        "earring":"*",
-        "weapon":"*"
-    }
+	"stat": {
+		"hp": [
+			120.0,
+			1000
+		],
+		"mp": [
+			200,
+			300
+		],
+		"hp_percent": 0,
+		"mp_percent": 0,
+		"exp": [
+			20,
+			100
+		],
+		"exp_percent": 0,
+		"damage": 10,
+		"damage_percent": 0,
+		"defensive": 1,
+		"defensive_percent": 0,
+		"speed": 0,
+		"speed_percent": 0,
+		"critical_percent": 0,
+		"evasion_percent": 0,
+		"level": 1
+	},
+	"item": {},
+	"info": {
+		"username": "user",
+		"password": "1234",
+		"money": "1000"
+	},
+	"wear": {
+		"hat": "*",
+		"coat": "*",
+		"pants": "*",
+		"shoes": "*",
+		"ring": "*",
+		"earring": "*",
+		"weapon": "*"
+	}
 }

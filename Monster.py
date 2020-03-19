@@ -122,22 +122,28 @@ class Monster(pygame.sprite.Sprite):
             self.Check_Collision()
         
 #대미지 x ( 100 / (100 + 방어력) ) 
-
+#한번 플레이어를 공격하게 되면 3초간 데미지를 주지 않는다 .
     def Attack(self):
         return self.mobinfo[self.name]['damage']
+
+    def SetDamageZero(self):
+        self.original = self.mobinfo[self.name]['damage']
+        self.mobinfo[self.name]['damage'] = 0
+        #seconds = (pygame.time.get_ticks() - start_ticks)/1000
+        #if seconds < 4:
 
 #플레이어의 데미지를 받음 
     def GetDamage(self, damage):
         damage = self.Cal_Damage(damage)
-        if self.mobinfo[self.name]['hp'] - damage <= 0:
+        if self.mobinfo[self.name]['hp'][0] - damage <= 0:
             return True  #몬스터 사망 
         else:
-            self.mobinfo[self.name]['hp'] -= damage
+            self.mobinfo[self.name]['hp'][0] -= damage
             return False
 
 #방어력 공식 계산
     def Cal_Damage(self, damage):
-        return damage * (100 / (100 * self.mobinfo[self.name]['defence']))
+        return damage * (100 / (100 * self.mobinfo[self.name]['defensive']))
 
     def Health(self):
         pass

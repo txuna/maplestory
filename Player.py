@@ -3,6 +3,9 @@ import json
 
 WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
+RED = (204, 0, 0)
+BLUE = (0, 0, 128)
+YELLOW = (255, 255, 0)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -48,7 +51,7 @@ class Player(pygame.sprite.Sprite):
 
     def Check_Collision(self):
         #몬스터와의 충돌
-        '''
+        #몬스터와 충돌이후 3초간 무적 상태 
         mob_collisions = pygame.sprite.spritecollide(self, self.game.MonsterObj.GetMonsterGroup(), False)
         if mob_collisions:
             for collision in mob_collisions:
@@ -56,7 +59,7 @@ class Player(pygame.sprite.Sprite):
                     return "Death"
                 else:
                     continue
-        '''
+        
         #바닥과의 충돌
         floor_collisions = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
         if floor_collisions:
@@ -74,20 +77,47 @@ class Player(pygame.sprite.Sprite):
                 else: 
                     continue
 
+    def GetPercent(self, cur, max, len):
+        return (len * (1 - ((max-cur)/max)))
+
     def Draw_BottomBar(self):
         pygame.draw.rect(self.game.gamepad, GRAY , (0, 422, 1024, 90))
         pygame.draw.line(self.game.gamepad, WHITE, (200, 422), (200, 512))
-        pygame.draw.line(self.game.gamepad, WHITE, (640, 422), (640, 512))
+        pygame.draw.line(self.game.gamepad, WHITE, (700, 422), (700, 512))
         name = self.userinfo['info']['username']
         level = self.userinfo['stat']['level']
-        text = self.font.render('Lv.{} {}'.format(str(level), name), True, WHITE, GRAY)
-        textRect = text.get_rect()
-        textRect.topleft = (20,445)
-        self.game.gamepad.blit(text, textRect)
+        usertext = self.font.render('Lv.{}    {}'.format(str(level), name), True, WHITE, GRAY)
+        usertextRect = usertext.get_rect()
+        usertextRect.topleft = (20,445)
+        self.game.gamepad.blit(usertext, usertextRect)
         #[0] current, [1] is max
         hp = self.userinfo['stat']['hp']
+        hp_percent = self.GetPercent(hp[0], hp[1], 150)
         mp = self.userinfo['stat']['mp']
+        mp_percent = self.GetPercent(mp[0], mp[1], 150)
         exp = self.userinfo['stat']['exp']
+        exp_percent = self.GetPercent(exp[0], exp[1], 400)
+
+        hptext = self.font.render('HP', True, WHITE, GRAY)
+        hptextRect = hptext.get_rect()
+        hptextRect.topleft = (210, 432)
+        self.game.gamepad.blit(hptext, hptextRect)
+        pygame.draw.rect(self.game.gamepad, WHITE , (260, 437, 150, 25)) #150
+        pygame.draw.rect(self.game.gamepad, RED , (260, 437, hp_percent, 25))
+        
+        mptext = self.font.render('MP', True, WHITE, GRAY)
+        mptextRect = mptext.get_rect()
+        mptextRect.topleft = (450, 432)
+        self.game.gamepad.blit(mptext, mptextRect)
+        pygame.draw.rect(self.game.gamepad, WHITE , (500, 437, 150, 25)) #150
+        pygame.draw.rect(self.game.gamepad, BLUE , (500, 437, mp_percent, 25))
+
+        exptext = self.font.render('EXP', True, WHITE, GRAY)
+        exptextRect = exptext.get_rect()
+        exptextRect.topleft = (210, 477)
+        self.game.gamepad.blit(exptext, exptextRect)
+        pygame.draw.rect(self.game.gamepad, WHITE , (275, 480, 400, 25)) #400
+        pygame.draw.rect(self.game.gamepad, YELLOW , (275, 480, exp_percent,25))
    
     #낙화 기능 점프 방지를 해야하니 move쓰지 않고 canjump에 False넣고 반복문 #CanFall 이라는 변수를 둬야할듯 
     def SetPos(self, pos):
@@ -108,15 +138,15 @@ class Player(pygame.sprite.Sprite):
 #몬스터로 인한 공격
     def GetDamage(self, damage):
         damage = self.Cal_Damage(damage)
-        if self.userinfo['stat']['hp'] - damage <= 0:
+        if self.userinfo['stat']['hp'][0] - damage <= 0:
             return True #사망 
         else:
-            self.userinfo['stat']['hp'] -= damage
+            self.userinfo['stat']['hp'][0] -= damage
             self.SaveData()
             return False
 
     def Cal_Damage(self, damage):
-        return damage * (100 / (100 * self.userinfo['stat']['defence']))
+        return damage * (100 / (100 * self.userinfo['stat']['defensive']))
 
 
     def update(self, LookAt): #현재 바라보고 있는 방향 인자로 넣음 
