@@ -55,6 +55,8 @@ class Monster(pygame.sprite.Sprite):
         self.rect.center = pos
         self.GetData()
         self.name = monster_name[monster_number]
+        self.NoneDamage = False
+        self.Start_Ticks = 0
 
     def GetData(self):
         with open('json/monster.json', encoding='utf-8') as monsterinfo:
@@ -124,12 +126,22 @@ class Monster(pygame.sprite.Sprite):
 #대미지 x ( 100 / (100 + 방어력) ) 
 #한번 플레이어를 공격하게 되면 3초간 데미지를 주지 않는다 .
     def Attack(self):
-        return self.mobinfo[self.name]['damage']
+        if self.NoneDamage == True:
+            self.SetDamageZero()
+            return 0
+        else:
+            self.NoneDamage = True
+            return self.mobinfo[self.name]['damage']
 
     def SetDamageZero(self):
-        self.original = self.mobinfo[self.name]['damage']
-        self.mobinfo[self.name]['damage'] = 0
-        #seconds = (pygame.time.get_ticks() - start_ticks)/1000
+        if self.Start_Ticks == 0:
+            self.Start_Ticks = pygame.time.get_ticks()
+        else:
+            seconds = (pygame.time.get_ticks() - self.Start_Ticks)/1000
+            if seconds >= 2:
+                self.NoneDamage = False
+                self.Start_Ticks = 0 
+                
         #if seconds < 4:
 
 #플레이어의 데미지를 받음 
