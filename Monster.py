@@ -82,7 +82,8 @@ class Monster(pygame.sprite.Sprite):
             return True #점프중이 아님
 
     def MakeMoveCount(self):
-        return random.choice([0,0, 0, 0,10,14,20])
+        return random.choice([0, 20])
+        #return random.choice([0,0, 0, 0,10,14,20])
 
     def decision_direction(self):
         return random.choice([1, -1])

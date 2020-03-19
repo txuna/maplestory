@@ -39,6 +39,8 @@ class Player(pygame.sprite.Sprite):
         self.image = self.resize[self.index]
         self.rect = self.image.get_rect()
 
+    def GetCurrentPos(self):
+        return self.userinfo['info']['Current_Pos']
     
     def GetData(self):
         with open('json/player.json', encoding='utf-8') as playerinfo:
@@ -64,13 +66,8 @@ class Player(pygame.sprite.Sprite):
         floor_collisions = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
         if floor_collisions:
             for collision in floor_collisions:
-                #print(collision.rect.top+10, self.rect.bottom)
-                #점프가 하강일때 올라갈때는 무시
-                #print(collision.rect.top, self.rect.bottom, self.Way)#480  451 False
                 if (collision.rect.top+10 >= self.rect.bottom):
-                    #print(collision.rect.top+10, self.rect.bottom)
-                    self.rect.bottom = collision.rect.top-3#+1해서 보정값 세워야하나
-                    #print(collision.rect.top-10, self.rect.bottom, self.Way)
+                    self.rect.bottom = collision.rect.top-3
                     self.CanJump = False #점프 못하게 방지 
                     self.jump_count = 10
                     self.Fallen = False

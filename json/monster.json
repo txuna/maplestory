@@ -7,7 +7,7 @@
         "drop_item":["dull_liquid"],
         "drop_money":[10, 11, 12, 13],
         "index":0,
-        "CanJump":false
+        "CanJump":true
     },
     "Orange_Mushroom":{
         "hp":[50, 50],

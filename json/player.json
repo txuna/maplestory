@@ -1,7 +1,7 @@
 {
 	"stat": {
 		"hp": [
-			860.0,
+			660.0,
 			1000
 		],
 		"mp": [
@@ -29,7 +29,8 @@
 	"info": {
 		"username": "user",
 		"password": "1234",
-		"money": "1000"
+		"money": "1000",
+		"Current_Pos": "Start"
 	},
 	"wear": {
 		"hat": "*",

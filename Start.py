@@ -31,7 +31,6 @@ class Game:
         self.Current_Mob = 0
         self.LookAt = True #True is right False is left LookAt
         self.make_map = True
-        self.pos_map = 'level1'
         self.clock = pygame.time.Clock()
         self.pad_width = 1024
         self.pad_height = 512
@@ -65,12 +64,17 @@ class Game:
         self.gamepad.blit(forest_background, (0,0))
         self.MapGroup = self.MapObj.GetMapGroup()
         self.MapGroup.draw(self.gamepad)
+        self.NpcGroup = self.MapObj.GetNpcGroup()
+        self.NpcGroup.draw(self.gamepad)
 
 #포탈에 진입시 맵을 생성함. 그리고 맵에 나타나는 몬스터수 생성 
     def MakeMap(self):
-        self.MapObj.Handler('Start') #Current_Pos
+        self.MapObj.Handler(self.player.GetCurrentPos()) #Current_Pos
         self.MonsterObj.InitGroup() #몬스터 그룹 초기화
-        self.Max_Mob = self.MapObj.GetMaxMonster('Start')
+        self.Max_Mob = self.MapObj.GetMaxMonster(self.player.GetCurrentPos())
+
+    def Check_NpcCollision(self, event):
+        self.MapObj.Check_NpcCollision(event)
 
     def run(self):
         self.playing = True
@@ -87,6 +91,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.playing = False
+                self.Check_NpcCollision(event)
             key = pygame.key.get_pressed()
             if key[pygame.K_LEFT]:
                 self.LookAt = False

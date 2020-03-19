@@ -1,0 +1,44 @@
+{
+    "A":{
+        "name":"solicitor",
+        "item":{
+            "water":{
+                "name":"water",
+                "kindof":"mp",
+                "increment":100,
+                "money":300,
+                "description":"탈수현상을 해결해줄 물이다."
+            },
+            "Beef":{
+                "name":"Beef",
+                "kindof":"hp",
+                "increment":400,
+                "money":400,
+                "description":"수입산 소고기다."
+            },
+            "chicken":{
+                "name":"chicken",
+                "kindof":"hp",
+                "increment":200,
+                "money":200,
+                "description":"국내산 닭고기다."
+            },
+            "pork":{
+                "name":"pork",
+                "kindof":"hp",
+                "increment":300,
+                "money":300,
+                "description":"원산지 불명 돼지고기다."
+            }
+        }
+    },
+    "B":{
+        "name":"test_npc",
+        "talk":"환영합니다 :) 레벨3이 되면 퀘스트가 오픈됩니다.",
+        "quest_level":3,
+        "quest":"beef 3개만 구해다줘!",
+        "require":"test test",
+        "reward":1000,
+        "success":false
+    }
+}
