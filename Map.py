@@ -1,7 +1,5 @@
 import pygame 
 import json
-from tkinter import *
-import tkinter.messagebox
 
 #사다리는 어떻게?
 #충돌 처리는 바닥만 , 장애물은 따로 클래스 만들어야 하나 
@@ -45,7 +43,8 @@ class MapClass(pygame.sprite.Sprite):
 
 
     def Show_TextBox(self, npc):
-        tkinter.messagebox.showinfo("Quest", npc.npcinfo['talk'])
+        pass
+        #tkinter.messagebox.showinfo("Quest", npc.npcinfo['talk'])
 
     def GetMaxMonster(self, MapSelect):
         return self.NumberOfMob[MapSelect]
@@ -126,7 +125,6 @@ class MapNPC(pygame.sprite.Sprite):
         self.rect.x = pos[0]
         self.rect.y = pos[1]-30
         self.npcinfo = npcinfo
-        print(pos)
         #self.world = Current_Villeage
         #self.role = NpcRole[role][self.world]
 

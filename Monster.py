@@ -16,7 +16,10 @@ slime = pygame.image.load('images/monster/slime.png')
 monster_img.append(pygame.transform.scale(slime, (60, 60)))
 TrueFalse = [True, False]
 
-test_pos = [(800, 100), (700, 100), (600, 100)]
+test_pos = [(800, 100), (700, 100), (600, 100)] #json으로 변환 
+
+GREEN = (0, 128, 0)
+RED = (204, 0, 0)
 
 class MonsterClass(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -89,6 +92,7 @@ class Monster(pygame.sprite.Sprite):
         return random.choice([1, -1])
 
     def update(self):
+        self.Draw_BottomBar()
         if self.decision_jump(): #점프중이 아닐때 True를 반환함
             self.CanJump = random.choice(TrueFalse)
         if self.move_count == 0:
@@ -134,6 +138,18 @@ class Monster(pygame.sprite.Sprite):
             self.NoneDamage = True
             return self.mobinfo[self.name]['damage']
 
+    def GetPercent(self, cur, max, len):
+        return (len * (1 - ((max-cur)/max)))
+
+    def Draw_BottomBar(self):
+        cur = self.mobinfo[self.name]['hp'][0]
+        max = self.mobinfo[self.name]['hp'][1]
+        hp_percent = self.GetPercent(cur, max, 50)
+        x = self.rect.x
+        y = self.rect.y-10
+        pygame.draw.rect(self.game.gamepad, RED , (x, y, 50, 5)) #150
+        pygame.draw.rect(self.game.gamepad, GREEN , (x, y, hp_percent, 5))
+
     def SetDamageZero(self):
         if self.Start_Ticks == 0:
             self.Start_Ticks = pygame.time.get_ticks()
@@ -143,13 +159,15 @@ class Monster(pygame.sprite.Sprite):
                 self.NoneDamage = False
                 self.Start_Ticks = 0 
                 
-        #if seconds < 4:
+
+    def GiveExp(self):
+        return self.mobinfo[self.name]['drop_exp']
 
 #플레이어의 데미지를 받음 
     def GetDamage(self, damage):
         damage = self.Cal_Damage(damage)
         if self.mobinfo[self.name]['hp'][0] - damage <= 0:
-            return True  #몬스터 사망 
+            return True  #몬스터 사망 그룹에서 제거
         else:
             self.mobinfo[self.name]['hp'][0] -= damage
             return False

@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.images = []
 
         self.font = pygame.font.Font('font/deliver.ttf', 26)
+        self.font2 = pygame.font.Font('font/deliver.ttf', 15)
         #플레이어의 정보 로드
         self.GetData()
         #아래 코드 리팩토링 하기 
@@ -94,28 +95,43 @@ class Player(pygame.sprite.Sprite):
         mp_percent = self.GetPercent(mp[0], mp[1], 150)
         exp = self.userinfo['stat']['exp']
         exp_percent = self.GetPercent(exp[0], exp[1], 400)
-
+        ##################################################################################
         hptext = self.font.render('HP', True, WHITE, GRAY)
         hptextRect = hptext.get_rect()
         hptextRect.topleft = (210, 432)
         self.game.gamepad.blit(hptext, hptextRect)
+
         pygame.draw.rect(self.game.gamepad, WHITE , (260, 437, 150, 25)) #150
         pygame.draw.rect(self.game.gamepad, RED , (260, 437, hp_percent, 25))
-        
+
+        hpcount = self.font2.render('{}/{}'.format(str(hp[0]),str(hp[1])), True,GRAY)
+        hpcountRect = hpcount.get_rect()
+        hpcountRect.topleft = (285,440)
+        self.game.gamepad.blit(hpcount, hpcountRect)
+        ##################################################################################
         mptext = self.font.render('MP', True, WHITE, GRAY)
         mptextRect = mptext.get_rect()
         mptextRect.topleft = (450, 432)
         self.game.gamepad.blit(mptext, mptextRect)
         pygame.draw.rect(self.game.gamepad, WHITE , (500, 437, 150, 25)) #150
         pygame.draw.rect(self.game.gamepad, BLUE , (500, 437, mp_percent, 25))
-
+        mpcount = self.font2.render('{}/{}'.format(str(mp[0]),str(mp[1])), True,GRAY)
+        mpcountRect = mpcount.get_rect()
+        mpcountRect.topleft = (540,440)
+        self.game.gamepad.blit(mpcount, mpcountRect)
+        ##################################################################################
         exptext = self.font.render('EXP', True, WHITE, GRAY)
         exptextRect = exptext.get_rect()
         exptextRect.topleft = (210, 477)
         self.game.gamepad.blit(exptext, exptextRect)
         pygame.draw.rect(self.game.gamepad, WHITE , (275, 480, 400, 25)) #400
         pygame.draw.rect(self.game.gamepad, YELLOW , (275, 480, exp_percent,25))
-   
+        expcount = self.font2.render('{}/{}'.format(str(exp[0]),str(exp[1])), True,GRAY)
+        expcountRect = expcount.get_rect()
+        expcountRect.topleft = (450,480)
+        self.game.gamepad.blit(expcount, expcountRect)
+        ####################################################################################
+    
     #낙화 기능 점프 방지를 해야하니 move쓰지 않고 canjump에 False넣고 반복문 #CanFall 이라는 변수를 둬야할듯 
     def SetPos(self, pos):
         #self.Check_Collision()
@@ -124,13 +140,28 @@ class Player(pygame.sprite.Sprite):
         self.rect.right = pos[0]
         self.rect.bottom = pos[1]-100 
 
+    def GetPlayerDirection(self):
+        pass
+
+    def GetPlayerPos(self):
+        return self.rect.midright
+
 #테스트용 L_CTRL, (화살 발사)
 #스킬류가 있어서 음 일단 test용 Attack으로 진행 
     def Attack(self):
         return self.userinfo['stat']['damage']
 
-    def SetHealth(self):
-        pass
+
+    def Increment_Exp(self, mob_exp):
+        exp = self.userinfo['stat']['exp']
+        if exp[0] + mob_exp >= exp[1]:
+            self.userinfo['stat']['level']+=1
+            self.userinfo['stat']['exp'][0]=(exp[1]-exp[0]+mob_exp)
+            self.userinfo['stat']['exp'][1] += 100
+        else:
+            self.userinfo['stat']['exp'][0] += mob_exp
+
+        self.SaveData()
 
 #몬스터로 인한 공격
     def GetDamage(self, damage):

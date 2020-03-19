@@ -3,6 +3,7 @@ from Player import Player
 import sys
 from Map import *
 from Monster import *
+from skill import *
 
 '''
 쉽게 상황으로 설명을 하면
@@ -27,6 +28,7 @@ forest_background = pygame.transform.scale(forest_background, (1024, 512))
 class Game:
     def __init__(self):
         pygame.init()
+        self.OnceSkill = 0
         self.Max_Mob = 0
         self.Current_Mob = 0
         self.LookAt = True #True is right False is left LookAt
@@ -40,6 +42,7 @@ class Game:
 
     #여러 복수객체들의 경우 pygame.sprite.Group()화 시켜야하는것인가 
     def new(self):
+        self.SkillObj = SkillClass(self)
         self.MapObj =  MapClass()
         self.player = Player(self) #플레이어 객체 
         self.playerGroup = pygame.sprite.Group()
@@ -99,8 +102,19 @@ class Game:
             if key[pygame.K_RIGHT]:
                 self.LookAt = True
                 self.player.move(2, 0)
-            if key[pygame.K_SPACE]:
+            if key[pygame.K_LALT ]:
                 self.player.CanJump = True 
+            if key[pygame.K_LCTRL]: #기본공격
+                if self.OnceSkill == 0:
+                    self.OnceSkill += 1
+                    self.SkillObj.Handler('Arrow')
+                elif self.OnceSkill == 1:
+                    self.OnceSkill +=1 
+                elif self.OnceSkill == 2:
+                    self.OnceSkill += 1
+                elif self.OnceSkill == 3:
+                    self.OnceSkill = 0
+
 
             self.gamepad.fill(WHITE)
             self.LoadMap()
@@ -109,7 +123,10 @@ class Game:
             self.LoadMonster()
             self.player.update(self.LookAt)
             self.player.jump()
-            
+            #현재 스킬 사용중이라면 
+            if self.SkillObj.NowSkill() != True:
+                self.SkillObj.GetSkillGroup().update()
+                self.SkillObj.GetSkillGroup().draw(self.gamepad)
             
             pygame.display.flip() #화면 전체를 업데이트함. pygame.display.update()와 같지만 이 update는 인수가 있다면 그 인수만 update
 
