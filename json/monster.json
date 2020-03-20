@@ -1,6 +1,6 @@
 {
     "Slime":{
-        "hp":[30, 30],
+        "hp":[300, 300],
         "damage":10,
         "defensive":1,
         "drop_exp":10,

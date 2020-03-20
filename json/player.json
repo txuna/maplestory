@@ -1,21 +1,24 @@
 {
 	"stat": {
 		"hp": [
-			310.0,
+			590.0,
 			1000
 		],
 		"mp": [
-			200,
-			300
+			29430,
+			30000
 		],
 		"hp_percent": 0,
 		"mp_percent": 0,
 		"exp": [
-			130,
+			270,
 			400
 		],
 		"exp_percent": 0,
-		"damage": 10,
+		"damage": [
+			2,
+			14
+		],
 		"damage_percent": 0,
 		"defensive": 1,
 		"defensive_percent": 0,

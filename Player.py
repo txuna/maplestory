@@ -1,5 +1,6 @@
 import pygame
 import json 
+import random
 
 WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
@@ -15,11 +16,16 @@ class Player(pygame.sprite.Sprite):
         self.CanJump = False
         #self.Way = False #False : 하강, True : 상승
         self.Fallen = True
+        ######## Attack이름은 기본공격임
+        self.Start_Attack_Ticks = 0
+        self.CanAttack = True
+        ########
         self.resize = []
         self.images = []
 
         self.font = pygame.font.Font('font/deliver.ttf', 26)
         self.font2 = pygame.font.Font('font/deliver.ttf', 15)
+        #self.damage_font = pygame.font.Font('font/Maplestory_Bold.ttf', 30)
         #플레이어의 정보 로드
         self.GetData()
         #아래 코드 리팩토링 하기 
@@ -46,6 +52,8 @@ class Player(pygame.sprite.Sprite):
     def GetData(self):
         with open('json/player.json', encoding='utf-8') as playerinfo:
             self.userinfo = json.load(playerinfo)
+        with open('json/skill.json', encoding='utf-8') as skillinfo:
+            self.skillinfo = json.load(skillinfo)
 
     def SaveData(self):
         with open('json/player.json', 'w', encoding='utf-8') as playerinfo:
@@ -146,11 +154,59 @@ class Player(pygame.sprite.Sprite):
     def GetPlayerPos(self):
         return self.rect.midright
 
+    def Check_Delay(self):
+        if self.Start_Attack_Ticks == 0 and self.CanAttack == True :
+            self.Start_Attack_Ticks = pygame.time.get_ticks()
+            self.CanAttack = False
+            return True #skill 가능
+        else:
+            seconds = (pygame.time.get_ticks() - self.Start_Attack_Ticks)/1000
+            if seconds >= 2:
+                self.CanAttack = True
+                self.Start_Attack_Ticks = 0
+                print("SET!")
+                return True
+            else:
+                self.CanAttack = False
+                return False
+
+    def Check_MP(self, skill_name):
+        if self.game.player.userinfo['stat']['mp'][0]-self.skillinfo[skill_name]['mp'] < 0:
+           return False
+        else:
+            self.game.player.userinfo['stat']['mp'][0]-=self.skillinfo[skill_name]['mp']
+            return True      
+
+    def skill(self, skill_name):
+        if not(self.Check_MP(skill_name)):
+            return False #마나 부족 
+        #스킬 사용 가능 딜레이 체크
+        if not(self.Check_Delay()):
+            print("COOL_DOWN")
+            return False
+        print("SKILL!")
+       # if self.CanAttack != True or self.Start_Attack_Ticks == 0:
+       #     return False
+        self.game.SkillObj.Decision_Skill(skill_name, self.skillinfo)
+
+    def NowSkill(self):
+        return self.CanAttack
+
+#{
+#    "Arrow":{
+#        "name":"BasicArror",
+#        "mp":10,
+#        "cool_down":0,
+#        "damage_percent":100,
+#        "NumberOf_Mob": 1,
+#        "NumberOf_Attack":1
+#    }
+#}
 #테스트용 L_CTRL, (화살 발사)
 #스킬류가 있어서 음 일단 test용 Attack으로 진행 
     def Attack(self):
-        return self.userinfo['stat']['damage']
-
+        damage = self.userinfo['stat']['damage']
+        return random.randint(damage[0], damage[1])
 
     def Increment_Exp(self, mob_exp):
         exp = self.userinfo['stat']['exp']

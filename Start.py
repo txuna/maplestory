@@ -107,7 +107,8 @@ class Game:
             if key[pygame.K_LCTRL]: #기본공격
                 if self.OnceSkill == 0:
                     self.OnceSkill += 1
-                    self.SkillObj.Handler('Arrow')
+                    self.player.skill('Arrow')
+                    #self.SkillObj.Handler('Arrow')
                 elif self.OnceSkill == 1:
                     self.OnceSkill +=1 
                 elif self.OnceSkill == 2:
@@ -123,8 +124,9 @@ class Game:
             self.LoadMonster()
             self.player.update(self.LookAt)
             self.player.jump()
-            #현재 스킬 사용중이라면 
-            if self.SkillObj.NowSkill() != True:
+            #현재 스킬 사용중이라면 CanAttack은 공격 가능 여부변수고 공격중인가 아닌가에 대한 변수가 아님
+            #skill 그룹에 뭔가가 있나 없나로 판단 
+            if self.SkillObj.GetSkillGroup():
                 self.SkillObj.GetSkillGroup().update()
                 self.SkillObj.GetSkillGroup().draw(self.gamepad)
             

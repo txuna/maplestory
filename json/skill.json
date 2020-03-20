@@ -1,0 +1,10 @@
+{
+    "Arrow":{
+        "name":"BasicArror",
+        "mp":10,
+        "cool_down":0,
+        "damage_percent":100,
+        "NumberOf_Mob": 1,
+        "NumberOf_Attack":1
+    }
+}

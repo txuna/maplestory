@@ -6,6 +6,20 @@ import random
 #monster_number로 어떤 몬스터를 가지고올것인지 결정한다. 
 #Slime : 0
 #Orange_Mushroom : 1
+'''
+    #display update하면 바로 사라질 텐데 음 #Attacked를 두고 3초뒤에 지우기?
+    def Draw_Damage(self, damage):
+        if self.New == True: #처음 맞은거임 데미지 스킨 위치 저장 
+            self.damagetext = self.damage_font.render(str(damage), True, DAMAGE_COLOR)
+            self.damageRect = self.damagetext.get_rect()
+            self.damageRect.topleft = (self.rect.x, self.rect.y-20)
+            self.previous = self.damageRect.topleft
+            #game blit은 update에 따로 함수 두기 
+            #self.game.gamepad.blit(self.damagetext, self.damageRect)
+
+        elif self.New == False:
+            pass
+'''
 
 monster_img = []
 monster_name = {
@@ -20,6 +34,7 @@ test_pos = [(800, 100), (700, 100), (600, 100)] #json으로 변환
 
 GREEN = (0, 128, 0)
 RED = (204, 0, 0)
+DAMAGE_COLOR = (180, 4, 174)
 
 class MonsterClass(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -49,6 +64,7 @@ class Monster(pygame.sprite.Sprite):
         self.Attacked = False #공격받고 있다면 위헤 health bar 올리기 
         self.game = game
         self.image = monster_img[monster_number]
+        self.damage_font = pygame.font.Font('font/Maplestory_Bold.ttf', 30)
         self.CanJump = False #True
         self.jump_count = 10
         self.Fallen = True
@@ -60,6 +76,7 @@ class Monster(pygame.sprite.Sprite):
         self.name = monster_name[monster_number]
         self.NoneDamage = False
         self.Start_Ticks = 0
+        self.New = True #True라면 처음 스킬에 맞은거임 
 
     def GetData(self):
         with open('json/monster.json', encoding='utf-8') as monsterinfo:
@@ -158,19 +175,26 @@ class Monster(pygame.sprite.Sprite):
             if seconds >= 2:
                 self.NoneDamage = False
                 self.Start_Ticks = 0 
-                
+    
 
     def GiveExp(self):
         return self.mobinfo[self.name]['drop_exp']
 
-#플레이어의 데미지를 받음 
-    def GetDamage(self, damage):
-        damage = self.Cal_Damage(damage)
-        if self.mobinfo[self.name]['hp'][0] - damage <= 0:
-            return True  #몬스터 사망 그룹에서 제거
-        else:
-            self.mobinfo[self.name]['hp'][0] -= damage
-            return False
+#플레이어의 데미지를 받음  damage를 넘길때 몇 번 때리는지 표시하고 이를 바탕으로 데미지 스킨 위로 제작
+    def GetDamage(self, damage, NumberOf):
+        self.New = True #만약 False라면 이전 데미지 위로 
+        for _ in range(NumberOf):
+            damage = self.Cal_Damage(damage)
+            #self.Draw_Damage(damage)
+            #self.New = False
+            #self.Attacked = True
+            if self.mobinfo[self.name]['hp'][0] - damage <= 0:
+                #self.New = True
+                return True  #몬스터 사망 그룹에서 제거
+            else:
+                self.mobinfo[self.name]['hp'][0] -= damage
+        #self.New = True
+        return False
 
 #방어력 공식 계산
     def Cal_Damage(self, damage):
