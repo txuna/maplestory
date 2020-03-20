@@ -21,13 +21,14 @@ import random
             pass
 '''
 
-monster_img = []
-monster_name = {
-    0:'Slime',
-    1:'Orange_Mushroom',
+monster_img = {
+    "0":{
+        "name":"mush",
+        "left_walk":[]
+    }
 }
-slime = pygame.image.load('images/monster/slime.png')
-monster_img.append(pygame.transform.scale(slime, (60, 60)))
+
+#slime = pygame.image.load('images/monster/slime.png')
 TrueFalse = [True, False]
 
 test_pos = [(800, 100), (700, 100), (600, 100)] #json으로 변환 
@@ -59,26 +60,44 @@ class MonsterClass(pygame.sprite.Sprite):
     def InitGroup(self):
         self.MonsterGroup = pygame.sprite.Group()
 
-
+#image를 이중 리스트로 
+# 딕셔너리 안에 리스트
 class Monster(pygame.sprite.Sprite):
     def __init__(self, game, monster_number, pos):
         pygame.sprite.Sprite.__init__(self)
         self.Attacked = False #공격받고 있다면 위헤 health bar 올리기 
         self.game = game
-        self.image = monster_img[monster_number]
         self.damage_font = pygame.font.Font('font/Maplestory_Bold.ttf', 30)
         self.CanJump = False #True
         self.jump_count = 10
         self.Fallen = True
         self.move_count = 0
         self.direction = 1
-        self.rect = self.image.get_rect()
-        self.rect.center = pos
+        self.number = monster_number
+        self.MakeImage(pos)
         self.GetData()
-        self.name = monster_name[monster_number]
+        self.name = monster_img[str(self.number)]['name']
         self.NoneDamage = False
         self.Start_Ticks = 0
-        self.New = True #True라면 처음 스킬에 맞은거임 
+        
+
+    def MakeImage(self, pos):
+        self.index = 0
+        self.images = []
+        self.images.append(pygame.image.load('images/monster/mush1.png'))
+        self.images.append(pygame.image.load('images/monster/mush1.png'))
+        self.images.append(pygame.image.load('images/monster/mush1.png'))
+        self.images.append(pygame.image.load('images/monster/mush2.png'))
+        self.images.append(pygame.image.load('images/monster/mush3.png'))
+        self.images.append(pygame.image.load('images/monster/mush4.png'))
+        self.images.append(pygame.image.load('images/monster/mush4.png'))
+        self.images.append(pygame.image.load('images/monster/mush4.png'))
+
+        for image in self.images:
+            monster_img[str(self.number)]['left_walk'].append(pygame.transform.scale(image, (60, 60)))
+        self.image = monster_img[str(self.number)]['left_walk'][self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = pos
 
     def GetData(self):
         with open('json/monster.json', encoding='utf-8') as monsterinfo:
@@ -112,6 +131,16 @@ class Monster(pygame.sprite.Sprite):
 
     def update(self):
         self.Draw_BottomBar()
+###
+        original = {'x':self.rect.x, 'y':self.rect.y}
+        self.index+=1
+        if self.index >= len(monster_img[str(self.number)]['left_walk']):
+            self.index = 0
+        self.image = monster_img[str(self.number)]['left_walk'][self.index]
+        self.rect = self.image.get_rect()
+        self.rect.x = original['x']
+        self.rect.y = original['y']
+###
         if self.decision_jump(): #점프중이 아닐때 True를 반환함
             self.CanJump = random.choice(TrueFalse)
         if self.move_count == 0:

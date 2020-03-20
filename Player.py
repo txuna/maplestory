@@ -146,8 +146,9 @@ class Player(pygame.sprite.Sprite):
         #print("player : ",pos )
         #self.rect.bottomleft = pos
         self.rect.right = pos[0]
-        self.rect.bottom = pos[1]-100 
+        self.rect.bottom = pos[1]-100
 
+#####################################################
     def GetPlayerDirection(self):
         pass
 
@@ -156,11 +157,6 @@ class Player(pygame.sprite.Sprite):
 
 #시간을 0으로 초기화하는 함수랑 
 #시간을 확인하는 함수를 따로 만들어야 할듯 .. 
-
-    def SetStartTime(self):
-        self.Start_Attack_Ticks = 0
-
-
     def Check_Delay(self, skill_name):
         if self.skillinfo[skill_name]['cur_time'] == 0:
             self.skillinfo[skill_name]['cur_time'] = pygame.time.get_ticks()

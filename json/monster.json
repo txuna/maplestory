@@ -1,22 +1,22 @@
 {
     "Slime":{
-        "hp":[50, 50],
+        "hp":[70, 70],
         "damage":10,
         "defensive":1,
         "drop_exp":10,
         "drop_item":["dull_liquid"],
         "drop_money":[10, 11, 12, 13],
-        "index":0,
+        "index":1,
         "CanJump":true
     },
-    "Orange_Mushroom":{
+    "mush":{
         "hp":[50, 50],
         "damage":20,
-        "defensive":0,
+        "defensive":1,
         "drop_exp":20,
-        "drop_item":["Mushrooom"],
+        "drop_item":["mush_hat"],
         "drop_money":[13, 14, 15, 16],
-        "index":1,
+        "index":0,
         "CanJump":true
     }
 }

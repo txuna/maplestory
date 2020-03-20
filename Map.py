@@ -88,7 +88,7 @@ class MapClass(pygame.sprite.Sprite):
 #벽은 쓰지 않는걸로 결정 
 StartNpc = pygame.image.load('images/npc/npc.png')
 StartNpc = pygame.transform.scale(StartNpc, (60, 60))
-StartBlock = pygame.image.load('images/map/soil.jpg')
+StartBlock = pygame.image.load('images/map/soil3.png')
 StartBlock = pygame.transform.scale(StartBlock, (30, 30))
 
 class MapWall(pygame.sprite.Sprite):
