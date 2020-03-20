@@ -160,19 +160,18 @@ class Player(pygame.sprite.Sprite):
     def SetStartTime(self):
         self.Start_Attack_Ticks = 0
 
-    def Check_Delay(self):
-        if self.Start_Attack_Ticks == 0:
-            self.Start_Attack_Ticks = pygame.time.get_ticks()
+
+    def Check_Delay(self, skill_name):
+        if self.skillinfo[skill_name]['cur_time'] == 0:
+            self.skillinfo[skill_name]['cur_time'] = pygame.time.get_ticks()
         else:
-            seconds = (pygame.time.get_ticks() - self.Start_Attack_Ticks)/1000
-            if seconds >= 1:
-                self.Start_Attack_Ticks = 0
-                #print("COOL DOWN CLEAR")
+            if self.skillinfo[skill_name]['cool_down'] <= ((pygame.time.get_ticks() - self.skillinfo[skill_name]['cur_time'])/1000):
+                self.skillinfo[skill_name]['cur_time'] = 0
                 return True
             else:
-                #print("COol...")
                 return False
 
+ 
     def Check_MP(self, skill_name):
         if self.game.player.userinfo['stat']['mp'][0]-self.skillinfo[skill_name]['mp'] < 0:
            return False
@@ -180,18 +179,11 @@ class Player(pygame.sprite.Sprite):
             self.game.player.userinfo['stat']['mp'][0]-=self.skillinfo[skill_name]['mp']
             return True      
 
-#각 각의 스킬 지속시간은 스킬이름에따른 딕셔너리를 만든다. 
-#ex) a = {
-#   'name':{
-#     'curtime':0,
-#     'cool_down':3
-#    }
-# }
     def skill(self, skill_name):
         if self.CanAttack == True: 
             pass
         else: #만약 CanAttack이 False라면 시간을 체크하고 바꿀지 아닐지 변경
-            if not(self.Check_Delay()):
+            if not(self.Check_Delay(skill_name)):
                 return False #아직 딜레이가 남았을 경우
             else:
                 self.CanAttack = True
@@ -204,32 +196,23 @@ class Player(pygame.sprite.Sprite):
     def NowSkill(self):
         return self.CanAttack
 
-#{
-#    "Arrow":{
-#        "name":"BasicArror",
-#        "mp":10,
-#        "cool_down":0,
-#        "damage_percent":100,
-#        "NumberOf_Mob": 1,
-#        "NumberOf_Attack":1
-#    }
-#}
-#테스트용 L_CTRL, (화살 발사)
-#스킬류가 있어서 음 일단 test용 Attack으로 진행 
     def Attack(self):
         damage = self.userinfo['stat']['damage']
         return random.randint(damage[0], damage[1])
 
     def Increment_Exp(self, mob_exp):
         exp = self.userinfo['stat']['exp']
-        if exp[0] + mob_exp >= exp[1]:
-            self.userinfo['stat']['level']+=1
-            self.userinfo['stat']['exp'][0]=(exp[1]-exp[0]+mob_exp)
-            self.userinfo['stat']['exp'][1] += 100
-        else:
-            self.userinfo['stat']['exp'][0] += mob_exp
-
+        level = self.userinfo['stat']['level']
+        receive = exp[0]+mob_exp
+        while (receive - exp[1]) >= 0:
+            receive = exp[1] - receive
+            level += 1
+            exp[1] = exp[1]*1.3
+        self.userinfo['stat']['exp'] = [receive, exp[1]]
+        self.userinfo['stat']['level'] = level
         self.SaveData()
+        return
+
 
 #몬스터로 인한 공격
     def GetDamage(self, damage):

@@ -1,18 +1,18 @@
 {
 	"stat": {
 		"hp": [
-			520.0,
+			490.0,
 			1000
 		],
 		"mp": [
-			0,
+			180,
 			300
 		],
 		"hp_percent": 0,
 		"mp_percent": 0,
 		"exp": [
-			40,
-			500
+			0.0,
+			130.0
 		],
 		"exp_percent": 0,
 		"damage": [
@@ -26,7 +26,7 @@
 		"speed_percent": 0,
 		"critical_percent": 0,
 		"evasion_percent": 0,
-		"level": 5
+		"level": 8
 	},
 	"item": {},
 	"info": {

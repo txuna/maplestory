@@ -3,7 +3,8 @@
     "Arrow":{
         "name":"BasicArror",
         "mp":10,
-        "cool_down":0,
+        "cool_down":0.5,
+        "cur_time":0,
         "damage_percent":100,
         "NumberOf_Mob": 1,
         "NumberOf_Attack":1,
@@ -14,6 +15,7 @@
         "mp":30,
         "duration":30, 
         "cool_down":0, 
+        "cur_time":0,
         "increment_object":"damage",
         "increment":30,
         "KindOf":0
@@ -23,6 +25,7 @@
         "mp":50,
         "duration":30,
         "cool_down":0,
+        "cur_time":0,
         "increment_object":"attack_speed",
         "increment":-1,
         "Kindof":0
@@ -32,6 +35,7 @@
         "mp":100,
         "duration":100,
         "cool_down":120,
+        "cur_time":0,
         "damage_percent":200,
         "NumberOf_Mob":1,
         "NumberOf_Attack":1,

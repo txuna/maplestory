@@ -44,7 +44,7 @@ class MonsterClass(pygame.sprite.Sprite):
         self.Currnet_Mob = 0
 
     def MakeMonster(self, Max_Mob):
-        if self.Currnet_Mob == Max_Mob:
+        if self.Currnet_Mob != 0:
             #print("Max ",self.Currnet_Mob)
             return
         for index, _ in enumerate(range(self.Currnet_Mob, Max_Mob, 1)):
@@ -187,11 +187,9 @@ class Monster(pygame.sprite.Sprite):
         self.New = True #만약 False라면 이전 데미지 위로 
         for _ in range(NumberOf):
             damage = self.Cal_Damage(damage)
-            #self.Draw_Damage(damage)
-            #self.New = False
-            #self.Attacked = True
             if self.mobinfo[self.name]['hp'][0] - damage <= 0:
-                #self.New = True
+                self.game.MonsterObj.GetMonsterGroup().remove(self)
+                self.game.MonsterObj.Currnet_Mob -= 1
                 return True  #몬스터 사망 그룹에서 제거
             else:
                 self.mobinfo[self.name]['hp'][0] -= damage
