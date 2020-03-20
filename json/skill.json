@@ -1,3 +1,4 @@
+
 {
     "Arrow":{
         "name":"BasicArror",
@@ -5,6 +6,35 @@
         "cool_down":0,
         "damage_percent":100,
         "NumberOf_Mob": 1,
-        "NumberOf_Attack":1
+        "NumberOf_Attack":1,
+        "KindOf":1
+    },
+    "Damage_Boost":{
+        "name":"PowerUp",
+        "mp":30,
+        "duration":30, 
+        "cool_down":0, 
+        "increment_object":"damage",
+        "increment":30,
+        "KindOf":0
+    },
+    "Speed_Boost":{
+        "name":"Speed_Boost",
+        "mp":50,
+        "duration":30,
+        "cool_down":0,
+        "increment_object":"attack_speed",
+        "increment":-1,
+        "Kindof":0
+    },
+    "turret":{
+        "name":"Boom_turret",
+        "mp":100,
+        "duration":100,
+        "cool_down":120,
+        "damage_percent":200,
+        "NumberOf_Mob":1,
+        "NumberOf_Attack":1,
+        "KindOf":1
     }
-}
+} 

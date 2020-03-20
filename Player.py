@@ -154,20 +154,23 @@ class Player(pygame.sprite.Sprite):
     def GetPlayerPos(self):
         return self.rect.midright
 
+#시간을 0으로 초기화하는 함수랑 
+#시간을 확인하는 함수를 따로 만들어야 할듯 .. 
+
+    def SetStartTime(self):
+        self.Start_Attack_Ticks = 0
+
     def Check_Delay(self):
-        if self.Start_Attack_Ticks == 0 and self.CanAttack == True :
+        if self.Start_Attack_Ticks == 0:
             self.Start_Attack_Ticks = pygame.time.get_ticks()
-            self.CanAttack = False
-            return True #skill 가능
         else:
             seconds = (pygame.time.get_ticks() - self.Start_Attack_Ticks)/1000
-            if seconds >= 2:
-                self.CanAttack = True
+            if seconds >= 1:
                 self.Start_Attack_Ticks = 0
-                print("SET!")
+                #print("COOL DOWN CLEAR")
                 return True
             else:
-                self.CanAttack = False
+                #print("COol...")
                 return False
 
     def Check_MP(self, skill_name):
@@ -177,16 +180,25 @@ class Player(pygame.sprite.Sprite):
             self.game.player.userinfo['stat']['mp'][0]-=self.skillinfo[skill_name]['mp']
             return True      
 
+#각 각의 스킬 지속시간은 스킬이름에따른 딕셔너리를 만든다. 
+#ex) a = {
+#   'name':{
+#     'curtime':0,
+#     'cool_down':3
+#    }
+# }
     def skill(self, skill_name):
+        if self.CanAttack == True: 
+            pass
+        else: #만약 CanAttack이 False라면 시간을 체크하고 바꿀지 아닐지 변경
+            if not(self.Check_Delay()):
+                return False #아직 딜레이가 남았을 경우
+            else:
+                self.CanAttack = True
         if not(self.Check_MP(skill_name)):
             return False #마나 부족 
-        #스킬 사용 가능 딜레이 체크
-        if not(self.Check_Delay()):
-            print("COOL_DOWN")
-            return False
-        print("SKILL!")
-       # if self.CanAttack != True or self.Start_Attack_Ticks == 0:
-       #     return False
+        #버프 스킬의 경우 따로 객체 호출 X 여기서 처리한다. 
+        self.CanAttack = False
         self.game.SkillObj.Decision_Skill(skill_name, self.skillinfo)
 
     def NowSkill(self):
