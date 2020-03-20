@@ -5,13 +5,13 @@
 			1000
 		],
 		"mp": [
-			50,
+			0,
 			300
 		],
 		"hp_percent": 0,
 		"mp_percent": 0,
 		"exp": [
-			30,
+			40,
 			500
 		],
 		"exp_percent": 0,

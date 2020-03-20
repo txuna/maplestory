@@ -105,16 +105,8 @@ class Game:
             if key[pygame.K_LALT ]:
                 self.player.CanJump = True 
             if key[pygame.K_LCTRL]: #기본공격
-                if self.OnceSkill == 0:
-                    self.OnceSkill += 1
-                    self.player.skill('Arrow')
-                    #self.SkillObj.Handler('Arrow')
-                elif self.OnceSkill == 1:
-                    self.OnceSkill +=1 
-                elif self.OnceSkill == 2:
-                    self.OnceSkill += 1
-                elif self.OnceSkill == 3:
-                    self.OnceSkill = 0
+                self.player.skill('Arrow')
+
 
 
             self.gamepad.fill(WHITE)
