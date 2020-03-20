@@ -44,9 +44,11 @@ class MonsterClass(pygame.sprite.Sprite):
         self.Currnet_Mob = 0
 
     def MakeMonster(self, Max_Mob):
-        if self.Currnet_Mob+1 == Max_Mob:
+        if self.Currnet_Mob == Max_Mob:
+            #print("Max ",self.Currnet_Mob)
             return
         for index, _ in enumerate(range(self.Currnet_Mob, Max_Mob, 1)):
+            #print(self.Currnet_Mob)
             mob = Monster(self.game, 0, test_pos[index])
             self.Currnet_Mob+=1
             self.MonsterGroup.add(mob)

@@ -71,6 +71,7 @@ class BasicArrow(pygame.sprite.Sprite):
             mob = mob_collisions[0]
             if mob.GetDamage(self.damage, self.NumberOf):
                 self.game.MonsterObj.GetMonsterGroup().remove(mob)
+                self.game.MonsterObj.Currnet_Mob -= 1
                 self.game.player.Increment_Exp(mob.GiveExp())
                 return True
             return True
