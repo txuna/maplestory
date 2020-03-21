@@ -1,12 +1,22 @@
 
 {
     "Arrow":{
-        "name":"BasicArror",
+        "name":"BasicArrow",
         "mp":10,
         "cool_down":0.5,
         "cur_time":0,
         "damage_percent":100,
         "NumberOf_Mob": 1,
+        "NumberOf_Attack":1,
+        "KindOf":1
+    },
+    "BoomShot":{
+        "name":"BoomShot",
+        "mp":20,
+        "cool_down":1,
+        "cur_time":0,
+        "damage_percent":200,
+        "NumberOf_Mob":1,
         "NumberOf_Attack":1,
         "KindOf":1
     },

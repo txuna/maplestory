@@ -106,6 +106,8 @@ class Game:
                 self.player.CanJump = True 
             if key[pygame.K_LCTRL]: #기본공격
                 self.player.skill('Arrow')
+            if key[pygame.K_a]:
+                self.player.skill('BoomShot')
 
 
 

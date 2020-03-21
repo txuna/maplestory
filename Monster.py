@@ -31,7 +31,6 @@ monster_img = {
 #slime = pygame.image.load('images/monster/slime.png')
 TrueFalse = [True, False]
 
-test_pos = [(800, 100), (700, 100), (600, 100)] #json으로 변환 
 
 GREEN = (0, 128, 0)
 RED = (204, 0, 0)
@@ -48,9 +47,8 @@ class MonsterClass(pygame.sprite.Sprite):
         if self.Currnet_Mob != 0:
             #print("Max ",self.Currnet_Mob)
             return
-        for index, _ in enumerate(range(self.Currnet_Mob, Max_Mob, 1)):
-            #print(self.Currnet_Mob)
-            mob = Monster(self.game, 0, test_pos[index])
+        for _ in enumerate(range(self.Currnet_Mob, Max_Mob, 1)):
+            mob = Monster(self.game, 0, (800, 100))
             self.Currnet_Mob+=1
             self.MonsterGroup.add(mob)
    
@@ -84,6 +82,7 @@ class Monster(pygame.sprite.Sprite):
     def MakeImage(self, pos):
         self.index = 0
         self.images = []
+        ######################################################## images/monster/{}{}.png.format()
         self.images.append(pygame.image.load('images/monster/mush1.png'))
         self.images.append(pygame.image.load('images/monster/mush1.png'))
         self.images.append(pygame.image.load('images/monster/mush1.png'))
