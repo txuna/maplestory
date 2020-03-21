@@ -25,6 +25,13 @@ class SkillClass(pygame.sprite.Sprite):
             boom = BoomShot(self.game, pos, self.NumberOf_Attack, self.NumberOf_Mob, self.damage_percent)
             self.SkillGroup.add(boom)
             return True
+        elif skill_name == 'RainArrow':
+            pos = list(self.game.player.GetPlayerPos())
+            temp = -200
+            for _ in range(0, 16):
+                temp +=30
+                arrow = RainArrow(self.game, (pos[0]-temp,0), self.NumberOf_Attack, self.NumberOf_Mob, self.damage_percent)
+                self.SkillGroup.add(arrow)
 
     def GetSkillGroup(self):
         return self.SkillGroup
@@ -35,7 +42,11 @@ Arrow = pygame.transform.scale(Arrow, (70, 50))
 
 Boom = pygame.image.load('images/skill/boom.png')
 Boom = pygame.transform.scale(Boom, (50, 50))
+
+Rain = pygame.image.load('images/skill/rainarrow.png')
+Rain = pygame.transform.scale(Rain, (50, 70))
         
+#가장 가까운 몬스터 찾기해야할듯 
 
 class BasicArrow(pygame.sprite.Sprite):
     def __init__(self, game, pos, NumberOf, NumberMob, Damage_Percent):
@@ -44,7 +55,7 @@ class BasicArrow(pygame.sprite.Sprite):
         self.image = Arrow
         self.rect = self.image.get_rect()
         self.rect.midleft = pos
-        self.damage = self.game.player.Attack() * (Damage_Percent/100)
+        self.damage = int(self.game.player.Attack() * (Damage_Percent/100))
         self.distance_x = 300
         self.StartPos_x = pos[0]
         self.NumberOf = NumberOf
@@ -76,6 +87,47 @@ class BasicArrow(pygame.sprite.Sprite):
             self.game.SkillObj.GetSkillGroup().remove(self)
         return
 
+class RainArrow(pygame.sprite.Sprite):
+    def __init__(self, game, pos, NumberOf, NumberMob, Damage_Percent):
+        pygame.sprite.Sprite.__init__(self)
+        self.game = game
+        self.image = Rain
+        self.rect = self.image.get_rect()
+        self.rect.midleft = pos
+        self.damage = int(self.game.player.Attack() * (Damage_Percent/100))
+        self.NumberOf = NumberOf
+        self.NumberMob = NumberMob   
+        self.jump_count = 10  
+        self.goup = False
+        self.speed = 15
+
+    def Check_Collision(self):
+        if not(self.game.MonsterObj.GetMonsterGroup()): #맵에 몬스터가 존재하지 않는다면
+            return False
+        mob_collisions = pygame.sprite.spritecollide(self, self.game.MonsterObj.GetMonsterGroup(), False)
+        if mob_collisions:
+            mob = mob_collisions[0]
+            if mob.GetDamage(self.damage, self.NumberOf): #몬스터가 사망했다면
+                self.game.player.Increment_Exp(mob.GiveExp())
+                self.game.player.GetDropItem(mob.GiveItem())
+                self.game.player.GetDropMoney(mob.GiveMoney())
+                return True
+            return True
+        else:
+            #floors = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
+            ##if floors:
+            #    return True
+            return False
+
+    def update(self):
+        self.rect.y += self.speed
+        if self.Check_Collision():
+            self.game.SkillObj.GetSkillGroup().remove(self) 
+            return
+        return
+
+
+
 class BoomShot(pygame.sprite.Sprite):
     def __init__(self, game, pos, NumberOf, NumberMob, Damage_Percent):
         pygame.sprite.Sprite.__init__(self)
@@ -83,7 +135,7 @@ class BoomShot(pygame.sprite.Sprite):
         self.image = Boom
         self.rect = self.image.get_rect()
         self.rect.midleft = pos
-        self.damage = self.game.player.Attack() * (Damage_Percent/100)
+        self.damage = int(self.game.player.Attack() * (Damage_Percent/100))
         self.distance_x = 400
         self.StartPos_x = pos[0]
         self.NumberOf = NumberOf
@@ -132,5 +184,5 @@ class BoomShot(pygame.sprite.Sprite):
         if (self.rect.x - self.StartPos_x) >= self.distance_x:
             self.game.SkillObj.GetSkillGroup().remove(self)
         return
-        
+    
 

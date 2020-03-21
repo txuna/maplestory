@@ -192,17 +192,31 @@ class Player(pygame.sprite.Sprite):
     def NowSkill(self):
         return self.CanAttack
 
+#
     def Attack(self):
         damage = self.userinfo['stat']['damage']
-        return random.randint(damage[0], damage[1])
+        damage = random.randint(damage[0], damage[1])
+        damage = int(damage * ((100+self.userinfo['stat']['damage_percent'])/100))
+        percent = random.randint(1, 101)
+        increment = 1
+        if percent <= self.userinfo['stat']['critical_percent']:
+            increment = 2
+        return  damage * increment
+
 
     def GetDropItem(self, DropItem):
-        pass
+        try:
+            self.userinfo['item'][DropItem] += 1
+        except KeyError:
+            self.userinfo['item'][DropItem] = 1
 
     def GetDropMoney(self, Money):
         self.userinfo['info']['money'] += Money
-        print(Money)
         self.SaveData()
+
+#레벨업에 대한 스탯 증가량 
+    def LevelUp(self):
+        pass
 
     def Increment_Exp(self, mob_exp):
         exp = self.userinfo['stat']['exp']

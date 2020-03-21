@@ -1,38 +1,38 @@
 {
 	"stat": {
 		"hp": [
-			300.0,
+			960.0,
 			1000
 		],
 		"mp": [
-			2400,
+			20,
 			5000
 		],
 		"hp_percent": 0,
 		"mp_percent": 0,
 		"exp": [
-			280,
-			390
+			557,
+			659
 		],
 		"exp_percent": 0,
 		"damage": [
 			1000,
 			2000
 		],
-		"damage_percent": 0,
+		"damage_percent": 2,
 		"defensive": 1,
 		"defensive_percent": 0,
 		"speed": 0,
 		"speed_percent": 0,
-		"critical_percent": 0,
+		"critical_percent": 3,
 		"evasion_percent": 0,
-		"level": 16
+		"level": 18
 	},
 	"item": {},
 	"info": {
 		"username": "user",
 		"password": "1234",
-		"money": 1043,
+		"money": 1904,
 		"Current_Pos": "Start"
 	},
 	"wear": {

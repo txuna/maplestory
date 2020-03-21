@@ -110,6 +110,8 @@ class Game:
                 self.player.skill('Arrow')
             if key[pygame.K_a]:
                 self.player.skill('BoomShot')
+            if key[pygame.K_s]:
+                self.player.skill('RainArrow')
 
 
 
