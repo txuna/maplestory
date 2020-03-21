@@ -196,6 +196,14 @@ class Player(pygame.sprite.Sprite):
         damage = self.userinfo['stat']['damage']
         return random.randint(damage[0], damage[1])
 
+    def GetDropItem(self, DropItem):
+        pass
+
+    def GetDropMoney(self, Money):
+        self.userinfo['info']['money'] += Money
+        print(Money)
+        self.SaveData()
+
     def Increment_Exp(self, mob_exp):
         exp = self.userinfo['stat']['exp']
         level = self.userinfo['stat']['level']
@@ -203,7 +211,7 @@ class Player(pygame.sprite.Sprite):
         while (receive - exp[1]) >= 0:
             receive = exp[1] - receive
             level += 1
-            exp[1] = exp[1]*1.3
+            exp[1] = int(exp[1]*1.3)
         self.userinfo['stat']['exp'] = [receive, exp[1]]
         self.userinfo['stat']['level'] = level
         self.SaveData()

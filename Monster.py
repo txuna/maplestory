@@ -207,6 +207,27 @@ class Monster(pygame.sprite.Sprite):
                 self.Start_Ticks = 0 
     
 
+    #누적 확률값을 이용해서 아이템 드랍 
+    def MakeDropItem(self):
+        drop_item = {}
+        temp = 0
+        percent = random.randint(1, 101)
+        item = self.mobinfo[self.name]['drop_item']
+        for key in item:
+            drop_item[key] = item[key] + temp
+            temp += drop_item[key]
+
+        for key in drop_item:
+            if drop_item[key] >= percent and drop_item[key] <= percent:
+                return key
+        return "ERROR DONT HAVE ITEM" 
+
+    def GiveMoney(self):
+        return random.choice(self.mobinfo[self.name]["drop_money"])
+
+    def GiveItem(self):
+        return self.MakeDropItem()
+
     def GiveExp(self):
         return self.mobinfo[self.name]['drop_exp']
 

@@ -27,6 +27,7 @@ usertextRect.topleft = (20,445)
 self.game.gamepad.blit(usertext, usertextRect)
 '''
 DAMAGE_COLOR = (180, 4, 174)
+WHITE = (255, 255, 255)
 
 class DamageEffectSkin(pygame.sprite.Sprite):
     def __init(self):
@@ -40,7 +41,7 @@ class DamageValueSkin(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.damage = damage
         self.game = game
-        self.image = self.font.render(str(self.damage), True, DAMAGE_COLOR)
+        self.image = self.font.render(str(self.damage), True, DAMAGE_COLOR, WHITE)
         self.rect = self.image.get_rect()
         #피격 당한 몬스터의 위치 제공 필요
         self.rect.topleft = pos

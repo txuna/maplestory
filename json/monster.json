@@ -10,11 +10,14 @@
         "CanJump":true
     },
     "mush":{
-        "hp":[5000, 5000],
+        "hp":[50000, 50000],
         "damage":20,
         "defensive":1,
         "drop_exp":20,
-        "drop_item":["mush_hat"],
+        "drop_item":{
+            "white_portion":30,
+            "mush_hat":70
+        },
         "drop_money":[13, 14, 15, 16],
         "index":0,
         "CanJump":true

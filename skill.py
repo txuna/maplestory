@@ -60,6 +60,8 @@ class BasicArrow(pygame.sprite.Sprite):
             mob = mob_collisions[0]
             if mob.GetDamage(self.damage, self.NumberOf): #몬스터가 사망했다면
                 self.game.player.Increment_Exp(mob.GiveExp())
+                self.game.player.GetDropItem(mob.GiveItem())
+                self.game.player.GetDropMoney(mob.GiveMoney())
                 return True
             return True
         else:
@@ -95,11 +97,15 @@ class BoomShot(pygame.sprite.Sprite):
             return False
         mob_collisions = pygame.sprite.spritecollide(self, self.game.MonsterObj.GetMonsterGroup(), False)
         if mob_collisions:
-            mob = mob_collisions[0]
-            if mob.GetDamage(self.damage, self.NumberOf): #몬스터가 사망했다면
-                self.game.player.Increment_Exp(mob.GiveExp())
+            for index, mob in enumerate(mob_collisions):
+                if index >= 2:
+                    return True
+                if mob.GetDamage(self.damage, self.NumberOf): #몬스터가 사망했다면
+                    self.game.player.Increment_Exp(mob.GiveExp())
+                    self.game.player.GetDropItem(mob.GiveItem())
+                    self.game.player.GetDropMoney(mob.GiveMoney())
+                    continue
                 return True
-            return True
         ## 바닥에 맞았을 경우 
         else:
             floors = pygame.sprite.spritecollide(self, self.game.MapObj.GetMapGroup(), False)
