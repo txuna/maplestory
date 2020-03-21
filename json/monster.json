@@ -10,7 +10,7 @@
         "CanJump":true
     },
     "mush":{
-        "hp":[50, 50],
+        "hp":[5000, 5000],
         "damage":20,
         "defensive":1,
         "drop_exp":20,

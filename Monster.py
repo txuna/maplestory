@@ -34,7 +34,6 @@ TrueFalse = [True, False]
 
 GREEN = (0, 128, 0)
 RED = (204, 0, 0)
-DAMAGE_COLOR = (180, 4, 174)
 
 class MonsterClass(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -77,6 +76,7 @@ class Monster(pygame.sprite.Sprite):
         self.name = monster_img[str(self.number)]['name']
         self.NoneDamage = False
         self.Start_Ticks = 0
+        self.AttackIndex = -20
         
 
     def MakeImage(self, pos):
@@ -215,6 +215,11 @@ class Monster(pygame.sprite.Sprite):
         self.New = True #만약 False라면 이전 데미지 위로 
         for _ in range(NumberOf):
             damage = self.Cal_Damage(damage)
+            pos = [self.rect.x, self.rect.y+self.AttackIndex]
+            self.game.DamageSkin.Handler("damage", damage, pos)
+            self.AttackIndex-=20
+            if self.AttackIndex <= -100:
+                self.AttackIndex = -20
             if self.mobinfo[self.name]['hp'][0] - damage <= 0:
                 self.game.MonsterObj.GetMonsterGroup().remove(self)
                 self.game.MonsterObj.Currnet_Mob -= 1

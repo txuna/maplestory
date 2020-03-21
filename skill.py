@@ -5,12 +5,7 @@ class SkillClass(pygame.sprite.Sprite):
     def __init__(self, game):
         pygame.sprite.Sprite.__init__(self)
         self.game = game
-        self.CanSkill = True
-        self.Start_Ticks = 0
         self.SkillGroup = pygame.sprite.Group()
-
-    def NowSkill(self):
-        return self.CanSkill
 
     #플레이어의 방향 체크
     def Decision_Skill(self, skill_name, skillinfo):

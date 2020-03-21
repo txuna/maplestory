@@ -4,6 +4,7 @@ import sys
 from Map import *
 from Monster import *
 from skill import *
+from DamageSkin import *
 
 '''
 쉽게 상황으로 설명을 하면
@@ -48,6 +49,7 @@ class Game:
         self.playerGroup = pygame.sprite.Group()
         self.MonsterObj = MonsterClass(self)
         self.playerGroup.add(self.player)
+        self.DamageSkin = DamageSkin(self)
 
 #특정 개체수 미만으로 떨어지면 지속적으로 생성
     def LoadMonster(self):
@@ -124,6 +126,9 @@ class Game:
                 self.SkillObj.GetSkillGroup().update()
                 self.SkillObj.GetSkillGroup().draw(self.gamepad)
             
+            if self.DamageSkin.GetSkinGroup():
+                self.DamageSkin.GetSkinGroup().update()
+                self.DamageSkin.GetSkinGroup().draw(self.gamepad)
             pygame.display.flip() #화면 전체를 업데이트함. pygame.display.update()와 같지만 이 update는 인수가 있다면 그 인수만 update
 
 
